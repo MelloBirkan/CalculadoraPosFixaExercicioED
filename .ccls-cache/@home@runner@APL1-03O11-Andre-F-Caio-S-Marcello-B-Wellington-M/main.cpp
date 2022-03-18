@@ -49,9 +49,9 @@ int main() {
 
     //Menu do programa com Switch/case.
     while (sair == false) {
-        cout << "Programa avaliador de expressões arimtméticas. \n1) Inserir expressão infixa \n2) Inserir valores"
+        cout << "\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir valores"
                 " numéricos as variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) "
-                "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada:";
+                "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
         cin >> opcao;
 
         switch (opcao) {
@@ -101,9 +101,12 @@ int main() {
             case 2: {
                 int a;
 
+              cout << "\n";
+
                 for (int count = 0; formula[count] != NULL; count++) {
                     if (((((int) formula[count]) >= 65) && (((int) formula[count]) <= 90)) || ((((int) formula[count]) >= 97) && (((int) formula[count]) <= 122))) {
-                        cout << "Qual o valor numérico de " << formula[count] << ":";
+                        
+                        cout << "Qual o valor numérico de " << formula[count] << ": ";
                         cin >> a;
                         pInfixo.push(a);
                     } else {
