@@ -14,50 +14,70 @@ Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
 #include "pilhaClasse.h"
 
 using namespace std;
-string formula;
-Pilha pInfixo;
 
 //Valida se as variáveis possuem uma única letra.
 int validarFormula(string formula){
-
-    int cont = 0;
-
-    while((formula[cont]) != '\0'){
-
-        if(((((int)formula[cont]) >= 7) && (((int)formula[cont]) <= 13)) || ((((int)formula[cont]) >= 33) && (((int)formula[cont]) <= 39)) || (((int)formula[cont]) == 44) || (((int)formula[cont]) == 46) ||((((int)formula[cont]) >= 48) && (((int)formula[cont]) <= 64)) || ((((int)formula[cont]) >= 91) && (((int)formula[cont]) <= 93)) || ((((int)formula[cont]) >= 95) && (((int)formula[cont]) <= 96)) || ((((int)formula[cont]) >= 123) && (((int)formula[cont]) <= 126))){
-            return 1;
-        }
-
-        if(((((int)formula[cont]) >= 65) && (((int)formula[cont]) <= 90)) || ((((int)formula[cont]) >= 97) && (((int)formula[cont]) <= 122))){
-            if(((((int)formula[cont+1]) >= 65) && (((int)formula[cont+1]) <= 90)) || ((((int)formula[cont+1]) >= 97) && (((int)formula[cont+1]) <= 122))){
-                return 2;
-            }
-        }
-
-        cont++;
+  int cont = 0;
+  
+  while((formula[cont]) != '\0'){
+    
+    if(((((int)formula[cont]) >= 7) && (((int)formula[cont]) <= 13)) || ((((int)formula[cont]) >= 33) && (((int)formula[cont]) <= 39)) || (((int)formula[cont]) == 44) || (((int)formula[cont]) == 46) ||((((int)formula[cont]) >= 48) && (((int)formula[cont]) <= 64)) || ((((int)formula[cont]) >= 91) && (((int)formula[cont]) <= 93)) || ((((int)formula[cont]) >= 95) && (((int)formula[cont]) <= 96)) || ((((int)formula[cont]) >= 123) && (((int)formula[cont]) <= 126))){
+      return 1;
     }
-
-    return 0;
+    
+    if(((((int)formula[cont]) >= 65) && (((int)formula[cont]) <= 90)) || ((((int)formula[cont]) >= 97) && (((int)formula[cont]) <= 122))){
+      if(((((int)formula[cont+1]) >= 65) && (((int)formula[cont+1]) <= 90)) || ((((int)formula[cont+1]) >= 97) && (((int)formula[cont+1]) <= 122))){
+        return 2;
+      }
+    }
+    cont++;
+  }
+  
+  return 0;
 }
 
-void insereInfixo(){
-  int validacao;
+//Imprime uma pilha
+void imprimePilha(Pilha pilha){
+  Pilha pAux;
   
-  do {
+  while (! pilha.isEmpty()){
+    pAux.push(pilha.pop());
+  }
+  
+  while (! pAux.isEmpty()){
+    
+    char aux = pAux.pop();
+
+    if (((((int) aux) >= 0) && (((int) aux) <= 9))){
+      cout << " " << (int)aux;
+    } else{
+      cout << " " << aux;
+    }
+    
+    //cout << " " << (pAux.pop());
+  }
+}
+
+//Insere a expressão inflixa
+Pilha insereInfixo(){
+  int validacao;
+  char formula;
+  Pilha pInfixo;
+  
+  do{
     cout << "\nDigite a formula: ";
-    cin >> formula;
+    scanf( "%c", &formula );
     
     validacao = validarFormula(formula);
     
-    if (validacao == 1) {
+    if (validacao == 1){
       
-      //Não seria melhor usar "cout <<" ?
-      printf("\nATENÇÃO: Uso de caractere proibido. Por favor, utilize apenas parênteses (para a prioridade das operações), os cinco operadores (adição: +, subtração: -, multiplicação: *, divisão: / e exponenciação: ^) e uma única letra para cada variável!\n");
-    } else {
-      if (validacao == 2) {
-        printf("\nATENÇÃO: A expressão possui variáveis com mais de uma letra. Por favor, digite a expressão no formato correto!\n");
-      } else {
-        printf("\nExpressão aceita dentro das regras do programa.\n");
+      cout << "\nATENÇÃO: Uso de caractere proibido. Por favor, utilize apenas parênteses (para a prioridade das operações), os cinco operadores (adição: +, subtração: -, multiplicação: *, divisão: / e exponenciação: ^) e uma única letra para cada variável!\n";
+    } else{
+      if (validacao == 2){
+        cout << "\nATENÇÃO: A expressão possui variáveis com mais de uma letra. Por favor, digite a expressão no formato correto!\n";
+      } else{
+        cout << "\nExpressão aceita dentro das regras do programa.\n";
       }
     }
   } while (validacao != 0);
@@ -68,75 +88,100 @@ void insereInfixo(){
     pInfixo.push(formula[cont]);
     cont++;
   }
+
+  return pInfixo;
+}
+
+Pilha insereValoresNumericos(Pilha pInfixo){
+  int a;
+  Pilha pAux, pInfixoAux, pInfixoNovo;
   
-  cout << "\n\nPilha formula: ";
+  pInfixoAux = pInfixo;
   
-  Pilha pAux;
-  
-  while (! pInfixo.isEmpty()){
-    pAux.push(pInfixo.pop());
-    }
+  while (! pInfixoAux.isEmpty()){
+    pAux.push(pInfixoAux.pop());
+  }
+
+  cout << "\n";
   
   while (! pAux.isEmpty()){
     char aux = pAux.pop();
-    cout << " " << aux;
+    
+    if (((((int) aux) >= 65) && (((int) aux) <= 90)) || ((((int) aux) >= 97) && (((int) aux) <= 122))){
+      cout << "Qual o valor numérico de " << aux << ": ";
+      cin >> a;
+      pInfixoNovo.push(a);
+    } else{
+      pInfixoNovo.push(aux);
+    }
   }
   
+  return pInfixoNovo;
+}
+
+// AINDA NO INÍCIO
+Pilha convertePosfixa(Pilha pInfixo){
+  Pilha pPosfixo, pAux;
+  
+  while (! pInfixo.isEmpty()){
+    char aux = pInfixo.pop();
+
+    if ((((int) aux) == 41)){
+      
+    }
+  }
+  
+  return pPosfixo;
 }
 
 int main() {
-    setlocale( LC_ALL, "" ); 
+  Pilha pInfixo, pInfixoNovo;
+  bool sair = false;
+  int opcao;
 
-    bool sair = false;
-    int opcao;
+  setlocale( LC_ALL, "" ); //Define os caracteres de saída para o UTF-8
 
-    //Menu do programa com Switch/case.
-    while (sair == false) {
-        cout << "\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir valores"
-                " numéricos as variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) "
-                "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
-        cin >> opcao;
+  //Menu do programa com Switch/case.
+  while (sair == false) {
+    cout << "\n\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir valores" << " numéricos as variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) " << "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
+    
+    cin >> opcao;
+    
+    switch (opcao){
+      
+      case 1:{
+        pInfixo = insereInfixo();
+        cout << "\n\nPilha formula: ";
+        imprimePilha(pInfixo);
+        cout << "\n\n";
+        break;
+      }
+      
+      // Alterei para criar uma pilha nova e não modificar a expressão infixa original (ela será importante para os itens 3 e 5), mas acho que seria melhor salvar isso em um vetor mesmo.
+      case 2: {
+        pInfixoNovo = insereValoresNumericos(pInfixo);
+        cout << "\n\nPilha Nova: ";
+        imprimePilha(pInfixoNovo);
+        break;
+      }
 
-        switch (opcao) {
+      case 3: {
+        convertePosfixa(pInfixo);
+      }
+      
+      case 4: {
+      }
+      
+      case 5: {
+        sair = true;
+        break;
+      }
 
-            case 1: {
-                insereInfixo();
-              
-                cout << "\n\n";
-                break;
-            }
-                // ||teste|| para o usuario colocar valores nas variaveis.
-            case 2: {
-                int a;
+    }
+  }
 
-              cout << "\n";
-
-                for (int count = 0; formula[count] != NULL; count++) {
-                    if (((((int) formula[count]) >= 65) && (((int) formula[count]) <= 90)) || ((((int) formula[count]) >= 97) && (((int) formula[count]) <= 122))) {
-                        
-                        cout << "Qual o valor numérico de " << formula[count] << ": ";
-                        cin >> a;
-                        pInfixo.push(a);
-                    } else {
-                        pInfixo.push(formula[count]);
-                    }
-                }
-                break;
-            }
-
-            case 4: {
-                }
-
-            case 5: {
-                sair = true;
-
-                break;
-            }
-
-        }
-        }
-
-    //system("pause");
-    return 0;
+  cout << endl << endl;
+  system("pause");
+  return 0;
 }
 

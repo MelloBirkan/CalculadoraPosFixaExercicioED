@@ -45,6 +45,7 @@ void imprimePilha(Pilha pilha){
   }
   
   while (! pAux.isEmpty()){
+    
     char aux = pAux.pop();
 
     if (((((int) aux) >= 0) && (((int) aux) <= 9))){
@@ -52,6 +53,8 @@ void imprimePilha(Pilha pilha){
     } else{
       cout << " " << aux;
     }
+    
+    //cout << " " << (pAux.pop());
   }
 }
 
@@ -116,6 +119,75 @@ Pilha insereValoresNumericos(Pilha pInfixo){
   return pInfixoNovo;
 }
 
+// AINDA ESTÁ TODO QUEBRADO
+// Define a prioridade entre os operadores
+Pilha prioridadeOperadores(Pilha pOperadores){
+  Pilha pOperadoresAux;
+  
+  while (! pOperadores.isEmpty()){
+    int tamanhoPilha = pOperadores.size();
+    
+    for(int i = 0; i <= tamanhoPilha; i++){
+      char aux = pOperadores.pop();
+      if(aux == '+' || aux == '-'){
+        pOperadoresAux.push(pOperadores.pop());
+      } else{
+        pOperadores.push(aux);
+      }
+    }
+    tamanhoPilha = pOperadores.size();
+    for(int i = 0; i <= tamanhoPilha; i++){
+      char aux = pOperadores.pop();
+      if(aux == '*' || aux == '/'){
+        pOperadoresAux.push(pOperadores.pop());
+      } else{
+        pOperadores.push(aux);
+      }
+    }
+    tamanhoPilha = pOperadores.size();
+    for(int i = 0; i <= tamanhoPilha; i++){
+      char aux = pOperadores.pop();
+      if(aux == '^'){
+        pOperadoresAux.push(pOperadores.pop());
+      } else{
+        pOperadores.push(aux);
+      }
+    }
+  }
+  
+  return pOperadoresAux;
+}
+
+// AINDA ESTÁ NO INÍCIO
+// Converte a expressão infixa para posfixa
+Pilha convertePosfixa(Pilha pInfixo){
+  Pilha pPosfixo, pAux, pOperadores;
+
+  while (! pInfixo.isEmpty()){
+    pAux.push(pInfixo.pop());
+  }
+  
+  do{
+    char aux = pAux.pop();
+
+    if(aux != '('){
+      if(aux == '+' || aux == '-' || aux == '*' || aux == '/' || aux == '^'){
+        pOperadores.push(aux);
+      } else{
+        pPosfixo.push(aux);
+      };
+    }
+  }while (! pAux.isEmpty());
+
+  pOperadores = prioridadeOperadores(pOperadores);
+
+  cout << "\n\nPosfixo: ";
+  imprimePilha(pPosfixo);
+  imprimePilha(pOperadores);
+  
+  return pPosfixo;
+}
+
 int main() {
   Pilha pInfixo, pInfixoNovo;
   bool sair = false;
@@ -145,6 +217,10 @@ int main() {
         cout << "\n\nPilha Nova: ";
         imprimePilha(pInfixoNovo);
         break;
+      }
+
+      case 3: {
+        convertePosfixa(pInfixo);
       }
       
       case 4: {
