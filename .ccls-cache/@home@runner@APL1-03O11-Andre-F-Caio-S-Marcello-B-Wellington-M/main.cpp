@@ -3,7 +3,7 @@ ESTRUTURA DE DADOS I [Turma 03O11]
 
 Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
 
-Nome: André Fressatti Pinheiro, TIA: 32123231.
+Nome: André Fressatti Pinheiro, TIA: .
 Nome: Caio Sampaio Oliveira, TIA: 32195621.
 Nome: Marcello Gonzatto Birkan. TIA: 42020034.
 Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
@@ -61,12 +61,12 @@ void imprimePilha(Pilha pilha){
 //Insere a expressão inflixa
 Pilha insereInfixo(){
   int validacao;
-  char formula;
+  string formula;
   Pilha pInfixo;
   
   do{
     cout << "\nDigite a formula: ";
-    scanf( "%c", &formula );
+    cin >> formula;
     
     validacao = validarFormula(formula);
     
@@ -119,17 +119,66 @@ Pilha insereValoresNumericos(Pilha pInfixo){
   return pInfixoNovo;
 }
 
-// AINDA NO INÍCIO
-Pilha convertePosfixa(Pilha pInfixo){
-  Pilha pPosfixo, pAux;
+// AINDA ESTÁ SEM VERIFICAR PARÊNTESES
+// Define a prioridade entre os operadores
+Pilha prioridadeOperadores(Pilha pOperadores){
+  Pilha pOperadoresAux, prioridade1, prioridade2, prioridade3;
   
-  while (! pInfixo.isEmpty()){
-    char aux = pInfixo.pop();
+  while (! pOperadores.isEmpty()){
+    char aux = pOperadores.pop();
 
-    if ((((int) aux) == 41)){
-      
+    if(aux == '+' || aux == '-'){
+      prioridade3.push(aux);
+    } else if (aux == '*' || aux == '/'){
+      prioridade2.push(aux);
+    } else{
+      prioridade1.push(aux);
     }
   }
+
+  while (! prioridade1.isEmpty()){
+    char aux = prioridade1.pop();
+    pOperadores.push(aux);
+  }
+
+  while (! prioridade2.isEmpty()){
+    char aux = prioridade2.pop();
+    pOperadores.push(aux);
+  }
+  
+  while (! prioridade3.isEmpty()){
+    char aux = prioridade3.pop();
+    pOperadores.push(aux);
+  }
+  return pOperadores;
+}
+
+// AINDA ESTÁ NO INÍCIO (LÓGICA NÃO FUNCIONA 100%)
+// Converte a expressão infixa para posfixa
+Pilha convertePosfixa(Pilha pInfixo){
+  Pilha pPosfixo, pAux, pOperadores;
+
+  while (! pInfixo.isEmpty()){
+    pAux.push(pInfixo.pop());
+  }
+  
+  do{
+    char aux = pAux.pop();
+
+    if(aux != '('){
+      if(aux == '+' || aux == '-' || aux == '*' || aux == '/' || aux == '^'){
+        pOperadores.push(aux);
+      } else{
+        pPosfixo.push(aux);
+      };
+    }
+  }while (! pAux.isEmpty());
+
+  pOperadores = prioridadeOperadores(pOperadores);
+
+  cout << "\n\nPosfixo: ";
+  imprimePilha(pPosfixo);
+  imprimePilha(pOperadores);
   
   return pPosfixo;
 }

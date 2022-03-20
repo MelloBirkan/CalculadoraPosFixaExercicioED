@@ -3,7 +3,7 @@ ESTRUTURA DE DADOS I [Turma 03O11]
 
 Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
 
-Nome: André Fressatti Pinheiro, TIA: 32123231.
+Nome: André Fressatti Pinheiro, TIA: .
 Nome: Caio Sampaio Oliveira, TIA: 32195621.
 Nome: Marcello Gonzatto Birkan. TIA: 42020034.
 Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
@@ -119,46 +119,41 @@ Pilha insereValoresNumericos(Pilha pInfixo){
   return pInfixoNovo;
 }
 
-// AINDA ESTÁ TODO QUEBRADO
+// AINDA ESTÁ SEM VERIFICAR PARÊNTESES
 // Define a prioridade entre os operadores
 Pilha prioridadeOperadores(Pilha pOperadores){
-  Pilha pOperadoresAux;
+  Pilha pOperadoresAux, prioridade1, prioridade2, prioridade3;
   
   while (! pOperadores.isEmpty()){
-    int tamanhoPilha = pOperadores.size();
-    
-    for(int i = 0; i <= tamanhoPilha; i++){
-      char aux = pOperadores.pop();
-      if(aux == '+' || aux == '-'){
-        pOperadoresAux.push(pOperadores.pop());
-      } else{
-        pOperadores.push(aux);
-      }
-    }
-    tamanhoPilha = pOperadores.size();
-    for(int i = 0; i <= tamanhoPilha; i++){
-      char aux = pOperadores.pop();
-      if(aux == '*' || aux == '/'){
-        pOperadoresAux.push(pOperadores.pop());
-      } else{
-        pOperadores.push(aux);
-      }
-    }
-    tamanhoPilha = pOperadores.size();
-    for(int i = 0; i <= tamanhoPilha; i++){
-      char aux = pOperadores.pop();
-      if(aux == '^'){
-        pOperadoresAux.push(pOperadores.pop());
-      } else{
-        pOperadores.push(aux);
-      }
+    char aux = pOperadores.pop();
+
+    if(aux == '+' || aux == '-'){
+      prioridade3.push(aux);
+    } else if (aux == '*' || aux == '/'){
+      prioridade2.push(aux);
+    } else{
+      prioridade1.push(aux);
     }
   }
+
+  while (! prioridade1.isEmpty()){
+    char aux = prioridade1.pop();
+    pOperadores.push(aux);
+  }
+
+  while (! prioridade2.isEmpty()){
+    char aux = prioridade2.pop();
+    pOperadores.push(aux);
+  }
   
-  return pOperadoresAux;
+  while (! prioridade3.isEmpty()){
+    char aux = prioridade3.pop();
+    pOperadores.push(aux);
+  }
+  return pOperadores;
 }
 
-// AINDA ESTÁ NO INÍCIO
+// AINDA ESTÁ NO INÍCIO (LÓGICA NÃO FUNCIONA 100%)
 // Converte a expressão infixa para posfixa
 Pilha convertePosfixa(Pilha pInfixo){
   Pilha pPosfixo, pAux, pOperadores;
