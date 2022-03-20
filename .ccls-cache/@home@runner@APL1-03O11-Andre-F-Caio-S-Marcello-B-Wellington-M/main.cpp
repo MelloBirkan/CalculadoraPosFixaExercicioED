@@ -14,6 +14,8 @@ Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
 #include "pilhaClasse.h"
 
 using namespace std;
+string formula;
+Pilha pInfixo;
 
 //Valida se as variáveis possuem uma única letra.
 int validarFormula(string formula){
@@ -38,12 +40,53 @@ int validarFormula(string formula){
     return 0;
 }
 
-int main() {
-    setlocale( LC_ALL, "" );
+void insereInfixo(){
+  int validacao;
+  
+  do {
+    cout << "\nDigite a formula: ";
+    cin >> formula;
+    
+    validacao = validarFormula(formula);
+    
+    if (validacao == 1) {
+      
+      //Não seria melhor usar "cout <<" ?
+      printf("\nATENÇÃO: Uso de caractere proibido. Por favor, utilize apenas parênteses (para a prioridade das operações), os cinco operadores (adição: +, subtração: -, multiplicação: *, divisão: / e exponenciação: ^) e uma única letra para cada variável!\n");
+    } else {
+      if (validacao == 2) {
+        printf("\nATENÇÃO: A expressão possui variáveis com mais de uma letra. Por favor, digite a expressão no formato correto!\n");
+      } else {
+        printf("\nExpressão aceita dentro das regras do programa.\n");
+      }
+    }
+  } while (validacao != 0);
+  
+  int cont = 0;
+  
+  while((formula[cont]) != '\0'){
+    pInfixo.push(formula[cont]);
+    cont++;
+  }
+  
+  cout << "\n\nPilha formula: ";
+  
+  Pilha pAux;
+  
+  while (! pInfixo.isEmpty()){
+    pAux.push(pInfixo.pop());
+    }
+  
+  while (! pAux.isEmpty()){
+    char aux = pAux.pop();
+    cout << " " << aux;
+  }
+  
+}
 
-    string formula;
-    Pilha pInfixo;
-    int validacao;
+int main() {
+    setlocale( LC_ALL, "" ); 
+
     bool sair = false;
     int opcao;
 
@@ -57,43 +100,8 @@ int main() {
         switch (opcao) {
 
             case 1: {
-                do {
-                    cout << "\nDigite a formula: ";
-                    cin >> formula;
-
-                    validacao = validarFormula(formula);
-
-                    if (validacao == 1) {
-
-                        //Não seria melhor usar "cout <<" ?
-                        printf("\nATENÇÃO: Uso de caractere proibido. Por favor, utilize apenas parênteses (para a prioridade das operações), os cinco operadores (adição: +, subtração: -, multiplicação: *, divisão: / e exponenciação: ^) e uma única letra para cada variável!\n");
-                    } else {
-                        if (validacao == 2) {
-                            printf("\nATENÇÃO: A expressão possui variáveis com mais de uma letra. Por favor, digite a expressão no formato correto!\n");
-                        } else {
-                            printf("\nExpressão aceita dentro das regras do programa.\n");
-                        }
-                    }
-                } while (validacao != 0);
-
-                int cont = 0;
-                while((formula[cont]) != '\0'){
-                    pInfixo.push(formula[cont]);
-                    cont++;
-                }
-
-                cout << "\n\nPilha formula: ";
-
-                Pilha pAux;
-
-                while (! pInfixo.isEmpty()){
-                    pAux.push(pInfixo.pop());
-                }
-
-                while (! pAux.isEmpty()){
-                    char aux = pAux.pop();
-                    cout << " " << aux;
-                }
+                insereInfixo();
+              
                 cout << "\n\n";
                 break;
             }
