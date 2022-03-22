@@ -265,14 +265,24 @@ int main() {
 
                 // Alterei para criar uma pilha nova e não modificar a expressão infixa original (ela será importante para os itens 3 e 5), mas acho que seria melhor salvar isso em um vetor mesmo.
             case 2: {
-                pInfixoNovo = insereValoresNumericos(pInfixo);
-                cout << "\n\nPilha Nova: ";
-                imprimePilha(pInfixoNovo);
+                if (!pInfixo.isEmpty()) {
+                    pInfixoNovo = insereValoresNumericos(pInfixo);
+                    cout << "\n\nPilha Nova: ";
+                    imprimePilha(pInfixoNovo);
+                } else {
+                    cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
+                }
                 break;
             }
 
             case 3: {
-                convertePosfixa(pInfixoNovo);
+                if (!pInfixoNovo.isEmpty()) {
+                    convertePosfixa(pInfixoNovo);
+                } else if (pInfixoNovo.isEmpty() && !pInfixo.isEmpty()) {
+                    convertePosfixa(pInfixo);
+                } else {
+                    cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
+                }
             }
 
             case 4: {
