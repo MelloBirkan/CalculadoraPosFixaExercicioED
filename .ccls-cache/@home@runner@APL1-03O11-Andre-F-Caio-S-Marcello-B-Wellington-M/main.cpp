@@ -78,8 +78,31 @@ void imprimePilha(Pilha pilha){
 
         if (((((int) aux) >= 0) && (((int) aux) <= 9))){
             cout << " " << (int)aux;
-        } else{
+        } else {
             cout << " " << aux;
+        }
+
+        //cout << " " << (pAux.pop());
+    }
+}
+
+//Para imprimir numeros com mais de 2 digitos(IMPORTANTE: O USUÁRIO NÃO PODE SELECIONAR CERTOS NUMEROS. BUG)
+void imprimePilhaInteirosExclusivos(Pilha pilha){
+    Pilha pAux;
+
+    while (! pilha.isEmpty()){
+        pAux.push(pilha.pop());
+    }
+
+    while (! pAux.isEmpty()){
+
+        char aux = pAux.pop();
+
+        if ((int)aux == 40 || (int)aux == 41 || (int)aux == 43 || (int)aux == (int)45 || aux == 47 || aux == 42) {
+            cout
+            << " " << aux;
+        } else {
+            cout << " " << (int)aux;
         }
 
         //cout << " " << (pAux.pop());
@@ -205,8 +228,14 @@ Pilha convertePosfixa(Pilha pInfixo) {
     pOperadores = prioridadeOperadores(pOperadores);
 
     cout << "\n\nPosfixo: ";
-    imprimePilha(pPosfixo);
-    imprimePilha(pOperadores);
+    if (((((int) pPosfixo.topo()) >= 65) && (((int) pPosfixo.topo()) <= 90)) || ((((int) pPosfixo.topo()) >= 97) && (((int) pPosfixo.topo()) <= 122))) {
+        imprimePilha(pPosfixo);
+        imprimePilha(pOperadores);
+
+    } else {
+        imprimePilhaInteirosExclusivos(pPosfixo);
+        imprimePilha(pOperadores);
+    }
 
     //--------------------------------------Adicionar de maniera funcional numa função-------------------------------------------------------
     // CONSEGUE RESOLVER EXPRESSÕES COM APENAS 1 OPERDOR.
@@ -268,7 +297,7 @@ int main() {
                 if (!pInfixo.isEmpty()) {
                     pInfixoNovo = insereValoresNumericos(pInfixo);
                     cout << "\n\nPilha Nova: ";
-                    imprimePilha(pInfixoNovo);
+                    imprimePilhaInteirosExclusivos(pInfixoNovo);
                 } else {
                     cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
                 }
