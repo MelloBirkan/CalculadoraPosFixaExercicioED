@@ -14,8 +14,6 @@ Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
 
 using namespace std;
 
-
-
 //Valida se as variáveis possuem uma única letra.
 int validarFormula(string formula){
     int cont = 0;
@@ -37,13 +35,23 @@ int validarFormula(string formula){
     return 0;
 }
 
+Pilha revertePilha(Pilha pilha){
+  Pilha pReversa;
+
+  while (!pilha.isEmpty()){
+    pReversa.push(pilha.pop());
+  }
+  
+  return pReversa;
+}
+
 // A APLICAÇÃO ESTÁ DENTRO DA FUNÇÃO "CONVERTEPOSFIXA".
 // Avalia/resolve a expressão matemática.
 int avaliarExpressao(string posfixo) {
     int count = 0, x, numero1, numero2, resposta;
     Pilha pNumeros;
 
-    while (posfixo[count] != NULL) {
+    while(posfixo[count] != NULL) {
         if (posfixo[count] >= '0' && posfixo[count] <= '9') {
             x = posfixo[count] - 48;
             pNumeros.push(x);
@@ -80,19 +88,22 @@ int avaliarExpressao(string posfixo) {
 void imprimePilha(Pilha pilha){
     Pilha pAux;
 
-    while (! pilha.isEmpty()){
+    while (!pilha.isEmpty()){
         pAux.push(pilha.pop());
     }
 
-    while (! pAux.isEmpty()){
+    while (!pAux.isEmpty()){
 
         char aux = pAux.pop();
-
+        
+        cout << " " << aux;
+        
+        /*
         if (((((int) aux) >= 0) && (((int) aux) <= 9))){
             cout << " " << (int)aux;
         } else {
             cout << " " << aux;
-        }
+        }*/
 
         //cout << " " << (pAux.pop());
     }
@@ -218,6 +229,7 @@ bool ehOperador(char op) {
     }
 }
 
+/*
 string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
     string posfixo;
 
@@ -264,56 +276,67 @@ string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
         pPosfixo.pop();
     }
     return posfixo;
-}
+}*/
 
-// AINDA ESTÁ NO INÍCIO (LÓGICA NÃO FUNCIONA 100%)
 // Converte a expressão infixa para posfixa
-string convertePosfixa(Pilha pPosfixo, string infixo) {
-    string posfixo;
+Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
+  Pilha pPosfixoAux;
+  
+  //pInfixo = revertePilha(pInfixo);
+  
+  while (!pInfixo.isEmpty()){
+    
+    if ((pInfixo.topo() >= 'a' && pInfixo.topo() <= 'z') || (pInfixo.topo() >= 'A' && pInfixo.topo() <= 'Z')) {
+      pPosfixoAux.push(pInfixo.pop());
 
-    for (int i = 0; i < infixo.length(); i++) {
-
-        if ((infixo[i] >= 'a' && infixo[i] <= 'z') || (infixo[i] >= 'A' && infixo[i] <= 'Z')) {
-            posfixo += infixo[i];
-
-        } else if (infixo[i] == '(') {
-            pPosfixo.push(infixo[i]);
-
-        } else if (infixo[i] == ')') {
-            while ((pPosfixo.topo() != '(') && (!pPosfixo.isEmpty())) {
-                char temporaria = pPosfixo.topo();
-                posfixo += temporaria;
-                pPosfixo.pop();
-            }
-            if (pPosfixo.topo() == '(') {
-                pPosfixo.pop();
-            }
-        } else if (ehOperador(infixo[i])) {
-            if (posfixo.empty()) {
-                pPosfixo.push(infixo[i]);
-            } else {
-                if (prioridadeOperadores(infixo[i]) > prioridadeOperadores(pPosfixo.topo())) {
-                    pPosfixo.push(infixo[i]);
-                } else if ((prioridadeOperadores(infixo[i]) == prioridadeOperadores(pPosfixo.topo())) &&
-                           (infixo[i] == '^')) {
-                    pPosfixo.push(infixo[i]);
-                } else {
-                    while ((!pPosfixo.isEmpty() &&
-                            (prioridadeOperadores(infixo[i]) <= prioridadeOperadores(pPosfixo.topo())))) {
-                        char temporario = pPosfixo.topo();
-                        posfixo += temporario;
-                        pPosfixo.pop();
-                    }
-                    pPosfixo.push(infixo[i]);
-                }
-            }
-        }
-    }
-    while (!pPosfixo.isEmpty()) {
-        posfixo += pPosfixo.topo();
+    } else if (pInfixo.topo() == '(') {
+      pPosfixo.push(pInfixo.pop());
+      
+    } else if (pInfixo.topo() == ')'){
+      while ((pPosfixo.topo() != '(') && (!pPosfixo.isEmpty())) {
+        char temporaria = pPosfixo.topo();
+        pPosfixoAux.push(temporaria);
         pPosfixo.pop();
+      }
+      
+      if (pPosfixo.topo() == '(') {
+        pPosfixo.pop();
+      }
+      pInfixo.pop();
+    } else if (ehOperador(pInfixo.topo())) {
+      if (pPosfixoAux.isEmpty()) {
+        pPosfixo.push(pInfixo.pop());
+      
+      } else {
+        if (prioridadeOperadores(pInfixo.topo()) > prioridadeOperadores(pPosfixo.topo())) {
+          pPosfixo.push(pInfixo.pop());
+          
+        } else if ((prioridadeOperadores(pInfixo.topo()) == prioridadeOperadores(pPosfixo.topo())) && (pInfixo.topo() == '^')) {
+          pPosfixo.push(pInfixo.pop());
+          
+        } else {
+          while ((!pPosfixo.isEmpty() && (prioridadeOperadores(pInfixo.topo()) <= prioridadeOperadores(pPosfixo.topo())))) {
+            char temporario = pPosfixo.topo();
+            pPosfixoAux.push(temporario);
+            pPosfixo.pop();
+          }
+          
+          pPosfixo.push(pInfixo.pop());
+        }
+      }
     }
-    return posfixo;
+  }
+  
+  while (!pPosfixo.isEmpty()) {
+  	if(pPosfixo.topo() != '('){
+        pPosfixoAux.push(pPosfixo.topo());
+    }
+    pPosfixo.pop();
+    //pPosfixoAux.push(pPosfixo.topo());
+    //pPosfixo.pop();
+  }
+    
+  return pPosfixoAux;
 }
     //--------------------------------------Adicionar de maniera funcional numa função-------------------------------------------------------
     // CONSEGUE RESOLVER EXPRESSÕES COM APENAS 1 OPERDOR.
@@ -347,9 +370,8 @@ string convertePosfixa(Pilha pPosfixo, string infixo) {
     return pPosfixo;
 }*/
 
-
 int main() {
-    Pilha pInfixo, pInfixoNovo, pTemporaria;
+    Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo;
     bool sair = false;
     int opcao;
     string infixo, infixoNovo, posfixo, avaliado;
@@ -370,6 +392,7 @@ int main() {
                     pInfixo.push(infixo[i]);
                 }
                 imprimePilha(pInfixo);
+                pInfixo = revertePilha(pInfixo);
                 break;
             }
 
@@ -390,11 +413,11 @@ int main() {
 
             case 3: {
                 if (!infixoNovo[0] == '\0') {
-                    posfixo = convertePosfixaNumeros(pTemporaria, infixoNovo);
+                    //posfixo = convertePosfixaNumeros(pTemporaria, infixoNovo);
                     cout << posfixo;
                 } else if (infixoNovo[0] == '\0' && !infixo[0] == '\0') {
-                    posfixo = convertePosfixa( pTemporaria, infixo);
-                    cout << posfixo;
+                    pPosfixo = convertePosfixa(pTemporaria, pInfixo);
+                    imprimePilha(pPosfixo);
                 } else {
                     cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
                 }
@@ -419,18 +442,3 @@ int main() {
     system("pause");
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
