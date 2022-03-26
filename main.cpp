@@ -430,7 +430,7 @@ int main() {
                 break;
             }
 
-            case 5: {
+            default: {
                 sair = true;
                 break;
             }
