@@ -1,4 +1,4 @@
-int prioridadeOperadores(char aux) {
+/*int prioridadeOperadores(char aux) {
         if (aux == '+' || aux == '-') {
             return 1;
         } else if (aux == '*' || aux == '/') {
@@ -65,6 +65,6 @@ string convertePosfixa(Pilha pPosfixo, string infixo) {
         pPosfixo.pop();
     }
     return posfixo;
-}
+}*/
 
 
