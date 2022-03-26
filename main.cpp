@@ -74,6 +74,7 @@ int avaliarExpressao(string posfixo) {
         count++;
     }
     cout << pNumeros.pop();
+  return resposta;
 }
 
 //Imprime uma pilha
