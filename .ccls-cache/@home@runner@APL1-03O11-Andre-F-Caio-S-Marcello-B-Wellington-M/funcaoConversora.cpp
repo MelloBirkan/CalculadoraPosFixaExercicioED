@@ -19,12 +19,12 @@ bool ehOperador(char op) {
     }
 }
 
-string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
+string convertePosfixa(Pilha pPosfixo, string infixo) {
     string posfixo;
 
     for (int i = 0; i < infixo.length(); i++) {
 
-        if (!isdigit(infixo[i])) {
+        if ((infixo[i] >= 'a' && infixo[i] <= 'z') || (infixo[i] >= 'A' && infixo[i] <= 'Z')) {
             posfixo += infixo[i];
 
         } else if (infixo[i] == '(') {
@@ -66,3 +66,5 @@ string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
     }
     return posfixo;
 }
+
+
