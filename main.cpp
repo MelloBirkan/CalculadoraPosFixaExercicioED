@@ -3,7 +3,6 @@ ESTRUTURA DE DADOS I [Turma 03O11]
 
 Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
 
-Nome: André Fressatti Pinheiro, TIA: .
 Nome: Caio Sampaio Oliveira, TIA: 32195621.
 Nome: Marcello Gonzatto Birkan. TIA: 42020034.
 Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
