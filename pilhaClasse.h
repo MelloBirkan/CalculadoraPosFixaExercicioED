@@ -14,7 +14,7 @@ typedef int Elem;
 
 // constante que indica o 
 // Tamanho alocado para a pilha
-const int TAM_PILHA = 10;
+const int TAM_PILHA = 100;
 
 // Classe pilha estática e sequencial
 class Pilha {

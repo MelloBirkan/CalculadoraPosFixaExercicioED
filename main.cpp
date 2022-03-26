@@ -35,6 +35,7 @@ int validarFormula(string formula){
     return 0;
 }
 
+// Inverte a posição dois itens impilhados na Pilha
 Pilha revertePilha(Pilha pilha){
   Pilha pReversa;
 
@@ -109,7 +110,7 @@ void imprimePilha(Pilha pilha){
     }
 }
 
-//Para imprimir numeros com mais de 2 digitos(IMPORTANTE: O USUÁRIO NÃO PODE SELECIONAR CERTOS NUMEROS. BUG)
+//Para imprimir numeros
 void imprimePilhaInteirosExclusivos(Pilha pilha){
     Pilha pAux;
 
@@ -120,15 +121,8 @@ void imprimePilhaInteirosExclusivos(Pilha pilha){
     while (! pAux.isEmpty()){
 
         char aux = pAux.pop();
-
-        if ((int)aux == 40 || (int)aux == 41 || (int)aux == 43 || (int)aux == (int)45 || aux == 47 || aux == 42) {
-            cout
-            << " " << aux;
-        } else {
-            cout << " " << (int)aux;
-        }
-
-        //cout << " " << (pAux.pop());
+		
+		cout << " " << (int)aux;
     }
 }
 
@@ -166,14 +160,15 @@ string insereInfixo(){
 
 }
 
+// Insere os valores numéricos para cada variável da expressão
 Pilha insereValoresNumericos(Pilha pInfixo){
-    int a;
-    Pilha pAux, pInfixoAux, pInfixoNovo;
+    int valor;
+    Pilha pAux, pValoresVariaveis;
+    
+    pInfixo = revertePilha(pInfixo);
 
-    pInfixoAux = pInfixo;
-
-    while (! pInfixoAux.isEmpty()){
-        pAux.push(pInfixoAux.pop());
+    while (! pInfixo.isEmpty()){
+        pAux.push(pInfixo.pop());
     }
 
     cout << "\n";
@@ -183,14 +178,12 @@ Pilha insereValoresNumericos(Pilha pInfixo){
 
         if (((((int) aux) >= 65) && (((int) aux) <= 90)) || ((((int) aux) >= 97) && (((int) aux) <= 122))){
             cout << "Qual o valor numérico de " << aux << ": ";
-            cin >> a;
-            pInfixoNovo.push(a);
-        } else{
-            pInfixoNovo.push(aux);
+            cin >> valor;
+            pValoresVariaveis.push(valor);
         }
     }
 
-    return pInfixoNovo;
+    return pValoresVariaveis;
 }
 
 string insereValoresNumericosString(string infixo){
@@ -282,8 +275,6 @@ string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
 Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
   Pilha pPosfixoAux;
   
-  //pInfixo = revertePilha(pInfixo);
-  
   while (!pInfixo.isEmpty()){
     
     if ((pInfixo.topo() >= 'a' && pInfixo.topo() <= 'z') || (pInfixo.topo() >= 'A' && pInfixo.topo() <= 'Z')) {
@@ -332,8 +323,6 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
         pPosfixoAux.push(pPosfixo.topo());
     }
     pPosfixo.pop();
-    //pPosfixoAux.push(pPosfixo.topo());
-    //pPosfixo.pop();
   }
     
   return pPosfixoAux;
@@ -371,7 +360,7 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
 }*/
 
 int main() {
-    Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo;
+    Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo, pValoresVariaveis;
     bool sair = false;
     int opcao;
     string infixo, infixoNovo, posfixo, avaliado;
@@ -380,7 +369,7 @@ int main() {
 
     //Menu do programa com Switch/case.
     while (sair == false) {
-        cout << "\n\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir valores" << " numéricos as variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) " << "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
+        cout << "\n\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir os valores numéricos das variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) " << "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
         cin >> opcao;
 
         switch (opcao){
@@ -400,11 +389,11 @@ int main() {
             case 2: {
                 if (!pInfixo.isEmpty()) {
                     //pInfixoNovo = insereValoresNumericos(pInfixo);
-                    infixoNovo = insereValoresNumericosString(infixo);
+                    //infixoNovo = insereValoresNumericosString(infixo);
+                    pValoresVariaveis = insereValoresNumericos(pInfixo);
                     //cout << infixoNovo;
-                    cout << "\n\nPilha Nova: " << infixoNovo;
-                    //imprimePilhaInteirosExclusivos(pInfixoNovo);
-
+                    cout << "\n\nValores: ";
+                    imprimePilhaInteirosExclusivos(pValoresVariaveis);
                 } else {
                     cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
                 }
