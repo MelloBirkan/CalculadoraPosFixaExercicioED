@@ -6,7 +6,7 @@ Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
 Nome: André Fressatti Pinheiro, TIA: .
 Nome: Caio Sampaio Oliveira, TIA: 32195621.
 Nome: Marcello Gonzatto Birkan. TIA: 42020034.
-Nome: Wellington Fernandes Muniz de Jesus. TIA: .
+Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
 */
 
 #include <iostream>
@@ -40,28 +40,38 @@ int validarFormula(string formula){
 
 // A APLICAÇÃO ESTÁ DENTRO DA FUNÇÃO "CONVERTEPOSFIXA".
 // Avalia/resolve a expressão matemática.
-int avaliarExpressao(Pilha pOperador, Pilha pNumeros) {
-    int numero1, numero2, resposta;
-    numero1 = pNumeros.pop();
-    numero2 = pNumeros.pop();
-    char operador = pOperador.pop();
-    switch (operador) {
-        case '+':
-            resposta = numero1 + numero2;
-            pNumeros.push(resposta);
-            break;
-        case '-':
-            resposta = numero1 - numero2;
-            pNumeros.push(resposta);
-            break;
-        case '*':
-            resposta = numero1 * numero2;
-            pNumeros.push(resposta);
-            break;
-        case '/':
-            resposta = numero1 / numero2;
-            pNumeros.push(resposta);
-            break;
+int avaliarExpressao(string posfixo) {
+    int count = 0, x, numero1, numero2, resposta;
+    Pilha pNumeros;
+
+    while (posfixo[count] != NULL) {
+        if (posfixo[count] >= '0' && posfixo[count] <= '9') {
+            x = posfixo[count] - 48;
+            pNumeros.push(x);
+
+        } else if (posfixo[count] == '+' || posfixo[count] == '-' || posfixo[count] == '*' || posfixo[count] == '/') {
+            numero1 = pNumeros.pop();
+            numero2 = pNumeros.pop();
+            switch (posfixo[count]) {
+                case '+':
+                    resposta = numero1 + numero2;
+                    pNumeros.push(resposta);
+                    break;
+                case '-':
+                    resposta = numero1 - numero2;
+                    pNumeros.push(resposta);
+                    break;
+                case '*':
+                    resposta = numero1 * numero2;
+                    pNumeros.push(resposta);
+                    break;
+                case '/':
+                    resposta = numero1 / numero2;
+                    pNumeros.push(resposta);
+                    break;
+            }
+        }
+        count++;
     }
     cout << pNumeros.pop();
 }
@@ -342,7 +352,7 @@ int main() {
     Pilha pInfixo, pInfixoNovo, pTemporaria;
     bool sair = false;
     int opcao;
-    string infixo, infixoNovo, posfixo;
+    string infixo, infixoNovo, posfixo, avaliado;
 
     setlocale( LC_ALL, "" ); //Define os caracteres de saída para o UTF-8
 
@@ -388,10 +398,12 @@ int main() {
                 } else {
                     cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
                 }
+                break;
             }
 
             case 4: {
-                //avaliarExpressao(pInfixoNovo, p);
+                cout << "O Resultado de: " << posfixo << " eh: ";
+                avaliado = avaliarExpressao(posfixo);
                 break;
             }
 
