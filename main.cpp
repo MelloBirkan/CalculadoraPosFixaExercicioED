@@ -54,19 +54,19 @@ int avaliarExpressao(string posfixo) {
             numero2 = pNumeros.pop();
             switch (posfixo[count]) {
                 case '+':
-                    resposta = numero1 + numero2;
+                    resposta = numero2 + numero1;
                     pNumeros.push(resposta);
                     break;
                 case '-':
-                    resposta = numero1 - numero2;
+                    resposta = numero2 - numero1;
                     pNumeros.push(resposta);
                     break;
                 case '*':
-                    resposta = numero1 * numero2;
+                    resposta = numero2 * numero1;
                     pNumeros.push(resposta);
                     break;
                 case '/':
-                    resposta = numero1 / numero2;
+                    resposta = numero2 / numero1;
                     pNumeros.push(resposta);
                     break;
             }
