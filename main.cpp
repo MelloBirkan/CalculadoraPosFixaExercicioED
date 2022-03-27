@@ -65,7 +65,7 @@ void imprimePilha(Pilha pilha){
 
     while (!pAux.isEmpty()){
 
-        char aux = pAux.pop();
+        char aux = (int)pAux.pop();
         
         cout << " " << aux;
     }
@@ -81,9 +81,9 @@ void imprimePilhaInteirosExclusivos(Pilha pilha){
 
     while (! pAux.isEmpty()){
 
-        char aux = pAux.pop();
+        //char aux = (int);
 		
-		cout << " " << (int)aux;
+		cout << " " << pAux.pop();
     }
 }
 
@@ -106,8 +106,8 @@ Pilha revertePilha(Pilha pilha){
   return pReversa;
 }
 
-int operacaoAvaliacao (int numero1, int numero2, char operador){
-  int resposta;
+float operacaoAvaliacao (float numero1, float numero2, char operador){
+  float resposta;
   switch (operador) {
     case '+':
       resposta = numero2 + numero1;
@@ -130,18 +130,19 @@ int operacaoAvaliacao (int numero1, int numero2, char operador){
 
 // Avaliador
 Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
-    int count = 0, x, numero1, numero2, numero3, resposta;
+    int count = 0, x;
+  float numero1, numero2, numero3, resposta;
     Pilha pResposta;
 
   pPosfixo = revertePilha(pPosfixo);
   pValoresVariaveis = revertePilha(pValoresVariaveis);
 
   while (!pPosfixo.isEmpty()){
-    if((pPosfixo.topo() >= 'a' && pPosfixo.topo() <= 'z') || (pPosfixo.topo() >= 'A' && pPosfixo.topo() <= 'Z')){
+    if(((int)pPosfixo.topo() >= 97 && (int)pPosfixo.topo() <= 122) || ((int)pPosfixo.topo() >= 65 && (int)pPosfixo.topo() <= 90)){
       
-      char aux1 = pPosfixo.pop();
-      char aux2 = pPosfixo.pop();
-      char aux3 = pPosfixo.pop();
+      char aux1 = (int)pPosfixo.pop();
+      char aux2 = (int)pPosfixo.pop();
+      char aux3 = (int)pPosfixo.pop();
 
       if(aux3 == -1){
         numero1 = pResposta.pop();
@@ -159,7 +160,7 @@ Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
         numero1 = pValoresVariaveis.pop();
         pResposta.push(numero1);
         
-        char aux4 = pPosfixo.pop();
+        char aux4 = (int)pPosfixo.pop();
         numero2 = pValoresVariaveis.pop();
         numero3 = pValoresVariaveis.pop();
         
@@ -167,7 +168,7 @@ Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
         pResposta.push(resposta);
       }
     }else{
-      char aux1 = pPosfixo.pop();
+      char aux1 = (int)pPosfixo.pop();
       
       numero1 = pResposta.pop();
       numero2 = pResposta.pop();
@@ -217,7 +218,7 @@ string insereInfixo(){
 
 // Insere os valores numéricos para cada variável da expressão
 Pilha insereValoresNumericos(Pilha pInfixo){
-    int valor;
+    float valor;
     Pilha pAux, pValoresVariaveis;
     
     pInfixo = revertePilha(pInfixo);
@@ -229,7 +230,7 @@ Pilha insereValoresNumericos(Pilha pInfixo){
     cout << "\n";
 
     while (! pAux.isEmpty()){
-        char aux = pAux.pop();
+        char aux = (int)pAux.pop();
 
         if (((((int) aux) >= 65) && (((int) aux) <= 90)) || ((((int) aux) >= 97) && (((int) aux) <= 122))){
             cout << "Qual o valor numérico de " << aux << ": ";
@@ -241,18 +242,18 @@ Pilha insereValoresNumericos(Pilha pInfixo){
     return pValoresVariaveis;
 }
 
-string insereValoresNumericosString(string infixo){
+/*string insereValoresNumericosString(string infixo){
     char temporario;
 
     for (int i = 0; i < infixo.length(); i++) {
-        if ((infixo[i] >= 'a' && infixo[i] <= 'z') || (infixo[i] >= 'A' && infixo[i] <= 'Z')) {
+        if (((int)infixo[i] >= 'a' && (int)infixo[i] <= 'z') || ((int)infixo[i] >= 'A' && (int)infixo[i] <= 'Z')) {
             cout << "O valor númerico de: " << infixo[i] << ": ";
             cin >> temporario;
             infixo[i] = temporario;
             }
     }
     return infixo;
-}
+}*/
 
 // Define a prioridade entre os operadores
 int prioridadeOperadores(char aux) {
@@ -274,37 +275,38 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
   
   while (!pInfixo.isEmpty()){
     
-    if ((pInfixo.topo() >= 'a' && pInfixo.topo() <= 'z') || (pInfixo.topo() >= 'A' && pInfixo.topo() <= 'Z')) {
+    if (((int)pInfixo.topo() >= 97 && (int)pInfixo.topo() <= 122) || ((int)pInfixo.topo() >= 65 && (int)pInfixo.topo() <= 90)) {
       pPosfixoAux.push(pInfixo.pop());
 
-    } else if (pInfixo.topo() == '(') {
+    } else if ((int)pInfixo.topo() == 40) {
       pPosfixo.push(pInfixo.pop());
       
-    } else if (pInfixo.topo() == ')'){
-      while ((pPosfixo.topo() != '(') && (!pPosfixo.isEmpty())) {
-        char temporaria = pPosfixo.topo();
+    } else if ((int)pInfixo.topo() == 41){
+      while (((int)pPosfixo.topo() != 40) && (!pPosfixo.isEmpty())) {
+        char temporaria = (int)pPosfixo.topo();
         pPosfixoAux.push(temporaria);
         pPosfixo.pop();
       }
       
-      if (pPosfixo.topo() == '(') {
+      if ((int)pPosfixo.topo() == 40) {
         pPosfixo.pop();
       }
+      
       pInfixo.pop();
-    } else if (ehOperador(pInfixo.topo())) {
+    } else if (ehOperador((int)pInfixo.topo())) {
       if (pPosfixoAux.isEmpty()) {
         pPosfixo.push(pInfixo.pop());
       
       } else {
-        if (prioridadeOperadores(pInfixo.topo()) > prioridadeOperadores(pPosfixo.topo())) {
+        if (prioridadeOperadores((int)pInfixo.topo()) > prioridadeOperadores((int)pPosfixo.topo())) {
           pPosfixo.push(pInfixo.pop());
           
-        } else if ((prioridadeOperadores(pInfixo.topo()) == prioridadeOperadores(pPosfixo.topo())) && (pInfixo.topo() == '^')) {
+        } else if ((prioridadeOperadores((int)pInfixo.topo()) == prioridadeOperadores((int)pPosfixo.topo())) && ((int)pInfixo.topo() == 94)) {
           pPosfixo.push(pInfixo.pop());
           
         } else {
-          while ((!pPosfixo.isEmpty() && (prioridadeOperadores(pInfixo.topo()) <= prioridadeOperadores(pPosfixo.topo())))) {
-            char temporario = pPosfixo.topo();
+          while ((!pPosfixo.isEmpty() && (prioridadeOperadores((int)pInfixo.topo()) <= prioridadeOperadores((int)pPosfixo.topo())))) {
+            char temporario = (int)pPosfixo.topo();
             pPosfixoAux.push(temporario);
             pPosfixo.pop();
           }
@@ -316,7 +318,7 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
   }
   
   while (!pPosfixo.isEmpty()) {
-  	if(pPosfixo.topo() != '('){
+  	if((int)pPosfixo.topo() != 40){
         pPosfixoAux.push(pPosfixo.topo());
     }
     pPosfixo.pop();
@@ -375,7 +377,7 @@ int main() {
             }
 
             case 4: {
-                cout << "O Resultado é: ";
+              cout << "O Resultado é: ";
               pAvaliacao = avaliarExpressao(pPosfixo, pValoresVariaveis);
               imprimePilhaInteirosExclusivos(pAvaliacao);
                 break;
