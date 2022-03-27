@@ -47,6 +47,7 @@ int validarFormula(string formula){
     
     if (((((int)formula[cont]) >= 65) && (((int)formula[cont]) <= 90)) || ((((int)formula[cont]) >= 97) && (((int)formula[cont]) <= 122))){
       if(((((int)formula[cont+1]) >= 65) && (((int)formula[cont+1]) <= 90)) || ((((int)formula[cont+1]) >= 97) && (((int)formula[cont+1]) <= 122))){
+        
         return 2;
       }
     }
@@ -155,9 +156,12 @@ Pilha insereInfixo(){
 
   do{
     cout << "\nDigite a formula: ";
-
-    cin.ignore();
-    getline(cin, formula);
+    
+    while(getline(cin, formula)){
+      if(formula != ""){
+          break;
+      }
+    }
       
     validacao = validarFormula(formula);
 
