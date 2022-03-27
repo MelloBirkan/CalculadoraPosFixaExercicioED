@@ -1,8 +1,16 @@
 /*
-   Pilha estática e sequencial
-   Desenvolvimento com classe
-   criação: 15/02/2022.
-   prof. Dr. Ivan Carlos Alcântara de Oliveira
+ESTRUTURA DE DADOS I [Turma 03O11]
+
+Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
+
+Nome: Caio Sampaio Oliveira, TIA: 32195621.
+Nome: Marcello Gonzatto Birkan. TIA: 42020034.
+
+Referências Bibliográficas:
+
+SZWARCFITER, J.L.; MARKENZON, L. Estruturas de Dados e seus Algoritmos, 3ª Ed. Rio de Janeiro: LTC, 2010.
+
+IME USP. Expressões Infixas, Prefixas and Posfixas. Disponível em: <https://panda.ime.usp.br/panda/static/pythonds_pt/03-EDBasicos/09-ExpressoesInfixaPrefixaPosfixa.html#:~:text=Se%20movermos%20o%20s%C3%ADmbolo%20de,subexpress%C3%A3o%20para%20a%20nota%C3%A7%C3%A3o%20posfixa>. Acesso em: 09 de março de 2022. São Paulo: IME USP, 2022. Web Site.
 */
 
 #include <iostream>
