@@ -178,6 +178,10 @@ Pilha insereInfixo(){
   int cont = 0;
 
   while ((formula[cont]) != '\0'){
+    if ((((int)formula[cont]) >= 97) && (((int)formula[cont]) <= 122)){
+      formula[cont] = (int)formula[cont] - 32;
+    }
+    
     if((formula[cont]) != ' '){
       pInfixo.push(formula[cont]);
     }
@@ -203,7 +207,7 @@ Pilha insereValoresNumericos(Pilha pInfixo){
   while (! pAux.isEmpty()){
     char aux = (int)pAux.pop();
     
-    if (((((int) aux) >= 65) && (((int) aux) <= 90)) || ((((int) aux) >= 97) && (((int) aux) <= 122))){
+    if ((((int) aux) >= 65) && (((int) aux) <= 90)){
       cout << "Qual o valor numérico de " << aux << ": ";
       cin >> valor;
       pValoresVariaveis.push(valor);
