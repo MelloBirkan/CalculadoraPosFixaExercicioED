@@ -5,18 +5,26 @@ Atividade de Aplicação 1 - Avaliador de Expressões Matemáticas.
 
 Nome: Caio Sampaio Oliveira, TIA: 32195621.
 Nome: Marcello Gonzatto Birkan. TIA: 42020034.
-Nome: Wellington Fernandes Muniz de Jesus. TIA: 32147538.
+
+Referências Bibliográficas:
+
+SZWARCFITER, J.L.; MARKENZON, L. Estruturas de Dados e seus Algoritmos, 3ª Ed. Rio de Janeiro: LTC, 2010.
+
+IME USP. Expressões Infixas, Prefixas and Posfixas. Disponível em: <https://panda.ime.usp.br/panda/static/pythonds_pt/03-EDBasicos/09-ExpressoesInfixaPrefixaPosfixa.html#:~:text=Se%20movermos%20o%20s%C3%ADmbolo%20de,subexpress%C3%A3o%20para%20a%20nota%C3%A7%C3%A3o%20posfixa>. Acesso em: 09 de março de 2022. São Paulo: IME USP, 2022. Web Site.
 */
 
 #include <iostream>
 #include <locale>
 #include "pilhaClasse.h"
+#include <math.h>
 
 using namespace std;
 
 //Valida se as variáveis possuem uma única letra.
 int validarFormula(string formula){
     int cont = 0;
+    int contParentese1 = 0;
+    int contParentese2 = 0;
 
     while((formula[cont]) != '\0'){
 
@@ -29,12 +37,74 @@ int validarFormula(string formula){
                 return 2;
             }
         }
-        cont++;
+
+      if((formula[cont]) == '('){
+             contParentese1 += 1;
+          }
+      if((formula[cont]) == ')'){
+            contParentese2 += 1;
+      }
+      
+      cont++;
     }
+
+  if(contParentese1 != contParentese2){
+    return 3;
+  }
 
     return 0;
 }
 
+//Imprime uma pilha
+void imprimePilha(Pilha pilha){
+    Pilha pAux;
+
+    while (!pilha.isEmpty()){
+        pAux.push(pilha.pop());
+    }
+
+    while (!pAux.isEmpty()){
+
+        char aux = pAux.pop();
+        
+        cout << " " << aux;
+        
+        /*
+        if (((((int) aux) >= 0) && (((int) aux) <= 9))){
+            cout << " " << (int)aux;
+        } else {
+            cout << " " << aux;
+        }*/
+
+        //cout << " " << (pAux.pop());
+    }
+}
+
+//Para imprimir numeros
+void imprimePilhaInteirosExclusivos(Pilha pilha){
+    Pilha pAux;
+
+    while (! pilha.isEmpty()){
+        pAux.push(pilha.pop());
+    }
+
+    while (! pAux.isEmpty()){
+
+        char aux = pAux.pop();
+		
+		cout << " " << (int)aux;
+    }
+}
+
+bool ehOperador(char op) {
+    if (op=='+' || op=='-' || op=='*' || op=='/' || op=='^') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Inverte a posição dois itens impilhados na Pilha
 Pilha revertePilha(Pilha pilha){
   Pilha pReversa;
 
@@ -45,12 +115,82 @@ Pilha revertePilha(Pilha pilha){
   return pReversa;
 }
 
-// A APLICAÇÃO ESTÁ DENTRO DA FUNÇÃO "CONVERTEPOSFIXA".
-// Avalia/resolve a expressão matemática.
-int avaliarExpressao(string posfixo) {
-    int count = 0, x, numero1, numero2, resposta;
-    Pilha pNumeros;
+int operacaoAvaliacao (int numero1, int numero2, char operador){
+  int resposta;
+  switch (operador) {
+    case '+':
+      resposta = numero2 + numero1;
+      break;
+    case '-':
+      resposta = numero2 - numero1;
+      break;
+    case '*':
+      resposta = numero2 * numero1;
+        break;
+    case '/':
+      resposta = numero2 / numero1;
+        break;
+    case '^':
+      resposta = pow(numero2, numero1);
+        break;
+            }
+  return resposta;
+}
 
+//----------------------------------------------------Avaliador----------------------------------------------
+Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
+    int count = 0, x, numero1, numero2, numero3, resposta;
+    Pilha pResposta;
+
+  pPosfixo = revertePilha(pPosfixo);
+  pValoresVariaveis = revertePilha(pValoresVariaveis);
+
+  while (!pPosfixo.isEmpty()){
+    if((pPosfixo.topo() >= 'a' && pPosfixo.topo() <= 'z') || (pPosfixo.topo() >= 'A' && pPosfixo.topo() <= 'Z')){
+      
+      char aux1 = pPosfixo.pop();
+      char aux2 = pPosfixo.pop();
+      char aux3 = pPosfixo.pop();
+
+      if(aux3 == -1){
+        numero1 = pResposta.pop();
+        numero2 = pValoresVariaveis.pop();
+        
+        resposta = operacaoAvaliacao(numero2, numero1, aux2);
+        pResposta.push(resposta);
+      } else if(ehOperador(aux3)){
+        numero1 = pValoresVariaveis.pop();
+        numero2 = pValoresVariaveis.pop();
+        
+        resposta = operacaoAvaliacao(numero2, numero1, aux3);
+        pResposta.push(resposta);
+      } else{
+        numero1 = pValoresVariaveis.pop();
+        pResposta.push(numero1);
+        
+        char aux4 = pPosfixo.pop();
+        numero2 = pValoresVariaveis.pop();
+        numero3 = pValoresVariaveis.pop();
+        
+        resposta = operacaoAvaliacao(numero3, numero2, aux4);
+        pResposta.push(resposta);
+      }
+    }else{
+      char aux1 = pPosfixo.pop();
+      
+      numero1 = pResposta.pop();
+      numero2 = pResposta.pop();
+
+      resposta = operacaoAvaliacao(numero1, numero2, aux1);
+      pResposta.push(resposta);
+    }
+  }
+  //imprimePilhaInteirosExclusivos(pResposta);
+  return pResposta;
+}
+
+  
+/*
     while(posfixo[count] != NULL) {
         if (posfixo[count] >= '0' && posfixo[count] <= '9') {
             x = posfixo[count] - 48;
@@ -82,55 +222,8 @@ int avaliarExpressao(string posfixo) {
     }
     cout << pNumeros.pop();
   return resposta;
-}
+*/
 
-//Imprime uma pilha
-void imprimePilha(Pilha pilha){
-    Pilha pAux;
-
-    while (!pilha.isEmpty()){
-        pAux.push(pilha.pop());
-    }
-
-    while (!pAux.isEmpty()){
-
-        char aux = pAux.pop();
-        
-        cout << " " << aux;
-        
-        /*
-        if (((((int) aux) >= 0) && (((int) aux) <= 9))){
-            cout << " " << (int)aux;
-        } else {
-            cout << " " << aux;
-        }*/
-
-        //cout << " " << (pAux.pop());
-    }
-}
-
-//Para imprimir numeros com mais de 2 digitos(IMPORTANTE: O USUÁRIO NÃO PODE SELECIONAR CERTOS NUMEROS. BUG)
-void imprimePilhaInteirosExclusivos(Pilha pilha){
-    Pilha pAux;
-
-    while (! pilha.isEmpty()){
-        pAux.push(pilha.pop());
-    }
-
-    while (! pAux.isEmpty()){
-
-        char aux = pAux.pop();
-
-        if ((int)aux == 40 || (int)aux == 41 || (int)aux == 43 || (int)aux == (int)45 || aux == 47 || aux == 42) {
-            cout
-            << " " << aux;
-        } else {
-            cout << " " << (int)aux;
-        }
-
-        //cout << " " << (pAux.pop());
-    }
-}
 
 //Insere a expressão inflixa
 string insereInfixo(){
@@ -147,10 +240,12 @@ string insereInfixo(){
         if (validacao == 1){
 
             cout << "\nATENÇÃO: Uso de caractere proibido. Por favor, utilize apenas parênteses (para a prioridade das operações), os cinco operadores (adição: +, subtração: -, multiplicação: *, divisão: / e exponenciação: ^) e uma única letra para cada variável!\n";
-        } else{
+        } else {
             if (validacao == 2){
                 cout << "\nATENÇÃO: A expressão possui variáveis com mais de uma letra. Por favor, digite a expressão no formato correto!\n";
-            } else{
+            } else if (validacao == 3){
+                cout << "\nATENÇÃO: A expressão possui uma quantidade incorreta de parênteses. Por favor, digite a expressão com a quantidade de parênteses correta!\n";
+            } else {
                 cout << "\nExpressão aceita dentro das regras do programa.\n";
                 return formula;
             }
@@ -166,14 +261,15 @@ string insereInfixo(){
 
 }
 
+// Insere os valores numéricos para cada variável da expressão
 Pilha insereValoresNumericos(Pilha pInfixo){
-    int a;
-    Pilha pAux, pInfixoAux, pInfixoNovo;
+    int valor;
+    Pilha pAux, pValoresVariaveis;
+    
+    pInfixo = revertePilha(pInfixo);
 
-    pInfixoAux = pInfixo;
-
-    while (! pInfixoAux.isEmpty()){
-        pAux.push(pInfixoAux.pop());
+    while (! pInfixo.isEmpty()){
+        pAux.push(pInfixo.pop());
     }
 
     cout << "\n";
@@ -183,14 +279,12 @@ Pilha insereValoresNumericos(Pilha pInfixo){
 
         if (((((int) aux) >= 65) && (((int) aux) <= 90)) || ((((int) aux) >= 97) && (((int) aux) <= 122))){
             cout << "Qual o valor numérico de " << aux << ": ";
-            cin >> a;
-            pInfixoNovo.push(a);
-        } else{
-            pInfixoNovo.push(aux);
+            cin >> valor;
+            pValoresVariaveis.push(valor);
         }
     }
 
-    return pInfixoNovo;
+    return pValoresVariaveis;
 }
 
 string insereValoresNumericosString(string infixo){
@@ -221,13 +315,7 @@ int prioridadeOperadores(char aux) {
 
 }
 
-bool ehOperador(char op) {
-    if (op=='+' || op=='-' || op=='*' || op=='/' || op=='^') {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 /*
 string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
@@ -282,8 +370,6 @@ string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
 Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
   Pilha pPosfixoAux;
   
-  //pInfixo = revertePilha(pInfixo);
-  
   while (!pInfixo.isEmpty()){
     
     if ((pInfixo.topo() >= 'a' && pInfixo.topo() <= 'z') || (pInfixo.topo() >= 'A' && pInfixo.topo() <= 'Z')) {
@@ -332,15 +418,13 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
         pPosfixoAux.push(pPosfixo.topo());
     }
     pPosfixo.pop();
-    //pPosfixoAux.push(pPosfixo.topo());
-    //pPosfixo.pop();
   }
     
   return pPosfixoAux;
 }
-    //--------------------------------------Adicionar de maniera funcional numa função-------------------------------------------------------
-    // CONSEGUE RESOLVER EXPRESSÕES COM APENAS 1 OPERDOR.
-    /*while (!pPosfixo.isEmpty()) {
+    //---------------------------------------------AVALIAR COM PILHA-------------------------------------------
+/*int avaliarExpressao(Pilha pNumeros) {
+    while (!pPosfixo.isEmpty()) {
         pNumeros.push(pPosfixo.pop());
     }
 
@@ -366,12 +450,10 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
             pNumeros.push(resposta);
             break;
     }
-    cout << "\nResposta: " << pNumeros.pop() << "\n";
-    return pPosfixo;
-}*/
+   */
 
 int main() {
-    Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo;
+    Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo, pValoresVariaveis, pAvaliacao;
     bool sair = false;
     int opcao;
     string infixo, infixoNovo, posfixo, avaliado;
@@ -380,7 +462,7 @@ int main() {
 
     //Menu do programa com Switch/case.
     while (sair == false) {
-        cout << "\n\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir valores" << " numéricos as variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) " << "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
+        cout << "\n\nPrograma avaliador de expressões arimtméticas.\n \n1) Inserir expressão infixa \n2) Inserir os valores numéricos das variáveis \n3) Converta a expressão, da notação infixa para a notação posfixa \n4) " << "Avaliar expressão \n5) Encerrar o programa\n\nOpção desejada: ";
         cin >> opcao;
 
         switch (opcao){
@@ -400,11 +482,11 @@ int main() {
             case 2: {
                 if (!pInfixo.isEmpty()) {
                     //pInfixoNovo = insereValoresNumericos(pInfixo);
-                    infixoNovo = insereValoresNumericosString(infixo);
+                    //infixoNovo = insereValoresNumericosString(infixo);
+                    pValoresVariaveis = insereValoresNumericos(pInfixo);
                     //cout << infixoNovo;
-                    cout << "\n\nPilha Nova: " << infixoNovo;
-                    //imprimePilhaInteirosExclusivos(pInfixoNovo);
-
+                    cout << "\n\nValores: ";
+                    imprimePilhaInteirosExclusivos(pValoresVariaveis);
                 } else {
                     cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
                 }
@@ -425,8 +507,9 @@ int main() {
             }
 
             case 4: {
-                cout << "O Resultado de: " << posfixo << " eh: ";
-                avaliado = avaliarExpressao(posfixo);
+                cout << "O Resultado é: ";
+              pAvaliacao = avaliarExpressao(pPosfixo, pValoresVariaveis);
+              imprimePilhaInteirosExclusivos(pAvaliacao);
                 break;
             }
 
