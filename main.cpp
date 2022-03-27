@@ -194,11 +194,12 @@ Pilha insereInfixo(){
 // Insere os valores numéricos para cada variável da expressão
 Pilha insereValoresNumericos(Pilha pInfixo){
   float valor;
-  Pilha pAux, pValoresVariaveis;
+  string variaveis;
+  Pilha pAux, pValoresVariaveis, pValoresAux;
     
   pInfixo = revertePilha(pInfixo);
 
-  while (! pInfixo.isEmpty()){
+  while (!pInfixo.isEmpty()){
     pAux.push(pInfixo.pop());
   }
 
@@ -206,11 +207,38 @@ Pilha insereValoresNumericos(Pilha pInfixo){
 
   while (! pAux.isEmpty()){
     char aux = (int)pAux.pop();
+    int posicao = 0; 
     
-    if ((((int) aux) >= 65) && (((int) aux) <= 90)){
-      cout << "Qual o valor numérico de " << aux << ": ";
-      cin >> valor;
-      pValoresVariaveis.push(valor);
+    if ((((int) aux) >= 65) && (((int) aux) <= 90)) {
+
+      if(variaveis.length() != 0){
+        int cont = 0;
+        
+        while ((variaveis[cont]) != '\0'){
+          if(variaveis[cont] != aux){
+            cont++;
+          } else{
+            posicao = variaveis.length() - (cont+1);
+            break;
+          }
+        }
+      }
+
+      if(posicao == 0){
+        variaveis = variaveis + aux;
+        cout << "Qual o valor numérico de " << aux << ": ";
+        cin >> valor;
+        pValoresVariaveis.push(valor);
+      } else{
+        pValoresAux = pValoresVariaveis;
+
+        for(int i = 0; i <= posicao; i++){
+          valor = pValoresAux.pop();
+        }
+        variaveis = variaveis + aux;
+        pValoresVariaveis.push(valor);
+      }
+      
     }
   }
 
@@ -370,7 +398,7 @@ int main() {
           pValoresVariaveis = insereValoresNumericos(pInfixo);
           cout << "\n\t-- Valores Numéricos das Variáveis --\n";
           cout << "\n- Valores: ";
-          imprimeValoresVariaveis(pInfixo, pValoresVariaveis);
+          imprimeValoresVariaveis(revertePilha(pInfixo), pValoresVariaveis);
         } else{
           cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
         }
@@ -393,7 +421,7 @@ int main() {
         if (!pPosfixo.isEmpty()){
           cout << "\n\t-- Avaliando a Expressão --\n";
           cout << "\n- Expressão Original (infixo): ";
-          imprimePilha(pInfixo);
+          imprimePilha(revertePilha(pInfixo));
           cout << "\n- Expressão posfixa: ";
           imprimePilha(pPosfixo);
           cout << "\n- Valores das variáveis: ";
