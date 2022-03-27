@@ -68,15 +68,6 @@ void imprimePilha(Pilha pilha){
         char aux = pAux.pop();
         
         cout << " " << aux;
-        
-        /*
-        if (((((int) aux) >= 0) && (((int) aux) <= 9))){
-            cout << " " << (int)aux;
-        } else {
-            cout << " " << aux;
-        }*/
-
-        //cout << " " << (pAux.pop());
     }
 }
 
@@ -137,7 +128,7 @@ int operacaoAvaliacao (int numero1, int numero2, char operador){
   return resposta;
 }
 
-//----------------------------------------------------Avaliador----------------------------------------------
+// Avaliador
 Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
     int count = 0, x, numero1, numero2, numero3, resposta;
     Pilha pResposta;
@@ -185,45 +176,8 @@ Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis) {
       pResposta.push(resposta);
     }
   }
-  //imprimePilhaInteirosExclusivos(pResposta);
   return pResposta;
 }
-
-  
-/*
-    while(posfixo[count] != NULL) {
-        if (posfixo[count] >= '0' && posfixo[count] <= '9') {
-            x = posfixo[count] - 48;
-            pNumeros.push(x);
-
-        } else if (posfixo[count] == '+' || posfixo[count] == '-' || posfixo[count] == '*' || posfixo[count] == '/') {
-            numero1 = pNumeros.pop();
-            numero2 = pNumeros.pop();
-            switch (posfixo[count]) {
-                case '+':
-                    resposta = numero2 + numero1;
-                    pNumeros.push(resposta);
-                    break;
-                case '-':
-                    resposta = numero2 - numero1;
-                    pNumeros.push(resposta);
-                    break;
-                case '*':
-                    resposta = numero2 * numero1;
-                    pNumeros.push(resposta);
-                    break;
-                case '/':
-                    resposta = numero2 / numero1;
-                    pNumeros.push(resposta);
-                    break;
-            }
-        }
-        count++;
-    }
-    cout << pNumeros.pop();
-  return resposta;
-*/
-
 
 //Insere a expressão inflixa
 string insereInfixo(){
@@ -300,7 +254,6 @@ string insereValoresNumericosString(string infixo){
     return infixo;
 }
 
-// AINDA ESTÁ SEM VERIFICAR PARÊNTESES
 // Define a prioridade entre os operadores
 int prioridadeOperadores(char aux) {
         if (aux == '+' || aux == '-') {
@@ -314,57 +267,6 @@ int prioridadeOperadores(char aux) {
     }
 
 }
-
-
-
-/*
-string convertePosfixaNumeros(Pilha pPosfixo, string infixo) {
-    string posfixo;
-
-    for (int i = 0; i < infixo.length(); i++) {
-
-        if (isdigit((int)infixo[i])) {
-            posfixo += infixo[i];
-
-        } else if (infixo[i] == '(') {
-            pPosfixo.push(infixo[i]);
-
-        } else if (infixo[i] == ')') {
-            while ((pPosfixo.topo() != '(') && (!pPosfixo.isEmpty())) {
-                char temporaria = pPosfixo.topo();
-                posfixo += temporaria;
-                pPosfixo.pop();
-            }
-            if (pPosfixo.topo() == '(') {
-                pPosfixo.pop();
-            }
-        } else if (ehOperador(infixo[i])) {
-            if (posfixo.empty()) {
-                pPosfixo.push(infixo[i]);
-            } else {
-                if (prioridadeOperadores(infixo[i]) > prioridadeOperadores(pPosfixo.topo())) {
-                    pPosfixo.push(infixo[i]);
-                } else if ((prioridadeOperadores(infixo[i]) == prioridadeOperadores(pPosfixo.topo())) &&
-                           (infixo[i] == '^')) {
-                    pPosfixo.push(infixo[i]);
-                } else {
-                    while ((!pPosfixo.isEmpty() &&
-                            (prioridadeOperadores(infixo[i]) <= prioridadeOperadores(pPosfixo.topo())))) {
-                        char temporario = pPosfixo.topo();
-                        posfixo += temporario;
-                        pPosfixo.pop();
-                    }
-                    pPosfixo.push(infixo[i]);
-                }
-            }
-        }
-    }
-    while (!pPosfixo.isEmpty()) {
-        posfixo += pPosfixo.topo();
-        pPosfixo.pop();
-    }
-    return posfixo;
-}*/
 
 // Converte a expressão infixa para posfixa
 Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
@@ -422,35 +324,6 @@ Pilha convertePosfixa(Pilha pPosfixo, Pilha pInfixo) {
     
   return pPosfixoAux;
 }
-    //---------------------------------------------AVALIAR COM PILHA-------------------------------------------
-/*int avaliarExpressao(Pilha pNumeros) {
-    while (!pPosfixo.isEmpty()) {
-        pNumeros.push(pPosfixo.pop());
-    }
-
-    int numero1, numero2, resposta;
-    numero1 = pNumeros.pop();
-    numero2 = pNumeros.pop();
-    char operador = pOperadores.pop();
-    switch (operador) {
-        case '+':
-            resposta = numero1 + numero2;
-            pNumeros.push(resposta);
-            break;
-        case '-':
-            resposta = numero1 - numero2;
-            pNumeros.push(resposta);
-            break;
-        case '*':
-            resposta = numero1 * numero2;
-            pNumeros.push(resposta);
-            break;
-        case '/':
-            resposta = numero1 / numero2;
-            pNumeros.push(resposta);
-            break;
-    }
-   */
 
 int main() {
     Pilha pInfixo, pInfixoNovo, pTemporaria, pPosfixo, pValoresVariaveis, pAvaliacao;
@@ -478,13 +351,9 @@ int main() {
                 break;
             }
 
-                // Alterei para criar uma pilha nova e não modificar a expressão infixa original (ela será importante para os itens 3 e 5), mas acho que seria melhor salvar isso em um vetor mesmo.
             case 2: {
                 if (!pInfixo.isEmpty()) {
-                    //pInfixoNovo = insereValoresNumericos(pInfixo);
-                    //infixoNovo = insereValoresNumericosString(infixo);
                     pValoresVariaveis = insereValoresNumericos(pInfixo);
-                    //cout << infixoNovo;
                     cout << "\n\nValores: ";
                     imprimePilhaInteirosExclusivos(pValoresVariaveis);
                 } else {
@@ -495,7 +364,6 @@ int main() {
 
             case 3: {
                 if (!infixoNovo[0] == '\0') {
-                    //posfixo = convertePosfixaNumeros(pTemporaria, infixoNovo);
                     cout << posfixo;
                 } else if (infixoNovo[0] == '\0' && !infixo[0] == '\0') {
                     pPosfixo = convertePosfixa(pTemporaria, pInfixo);
