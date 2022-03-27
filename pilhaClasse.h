@@ -1,22 +1,22 @@
 /*
-   Pilha estÃ¡tica e sequencial
+   Pilha estática e sequencial
    Desenvolvimento com classe
-   criaÃ§Ã£o: 15/02/2022.
-   prof. Dr. Ivan Carlos AlcÃ¢ntara de Oliveira
+   criação: 15/02/2022.
+   prof. Dr. Ivan Carlos Alcântara de Oliveira
 */
 
 #include <iostream>
 
 using namespace std;
 
-// definiÃ§Ã£o de um novo tipo de dado
+// definição de um novo tipo de dado
 typedef float Elem; 
 
 // constante que indica o 
 // Tamanho alocado para a pilha
 const int TAM_PILHA = 100;
 
-// Classe pilha estÃ¡tica e sequencial
+// Classe pilha estática e sequencial
 class Pilha {
 	private:
    		int topoPilha;
@@ -38,12 +38,12 @@ Pilha::Pilha(){
 }
 
 // Destrutor da pilha
-// NÃ£o faz nada, pois 
-// a alocaÃ§Ã£o Ã© estÃ¡tica e senquencial
+// Não faz nada, pois 
+// a alocação estática e senquencial
 Pilha::~Pilha(){};
 
 // Verifica se a pilha
-// estÃ¡ vazia
+// está vazia
 bool Pilha::isEmpty( ) {
   if (this->topoPilha == -1)
    	return true;
@@ -51,7 +51,7 @@ bool Pilha::isEmpty( ) {
    	return false;
 }
 
-// Verifica se a pilha estÃ¡
+// Verifica se a pilha está
 // cheia
 bool Pilha::isFull( ){
   if (this->topoPilha == TAM_PILHA-1)
@@ -67,8 +67,6 @@ void Pilha::push( Elem e ) {
         this->e[++this->topoPilha] = e;
 }
 
-
-
 // remove um elemento 
 // do topo da pilha
 Elem Pilha::pop( ){
@@ -79,7 +77,7 @@ Elem Pilha::pop( ){
   }
 }
 
-// Retorna o elemento que estÃ¡
+// Retorna o elemento que está
 // no topo da pilha
 Elem Pilha::topo( ){
   if ( ! this->isEmpty( ))
@@ -89,9 +87,8 @@ Elem Pilha::topo( ){
   }
 }
 
-/// obtÃ©m o total de elementos 
+/// obtêm o total de elementos 
 // armazenados na Pilha
 int Pilha::size( ){
   return topoPilha+1;
 }
-
