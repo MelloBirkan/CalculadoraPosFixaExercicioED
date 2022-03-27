@@ -148,14 +148,16 @@ void imprimeValoresVariaveis(Pilha pPosfixo, Pilha pValoresVariaveis){
 /* ----- FUNÇÕES PRINCIPAIS ----- */
 
 // Insere a expressão inflixa
-string insereInfixo(){
+Pilha insereInfixo(){
   int validacao;
   string formula;
   Pilha pInfixo;
 
   do{
     cout << "\nDigite a formula: ";
-    cin >> formula;
+
+    cin.ignore();
+    getline(cin, formula);
       
     validacao = validarFormula(formula);
 
@@ -169,7 +171,6 @@ string insereInfixo(){
         cout << "\nATENÇÃO: A expressão possui uma quantidade incorreta de parênteses. Por favor, digite a expressão com a quantidade de parênteses correta!\n";
       } else{
         cout << "\nExpressão aceita dentro das regras do programa.\n";
-        return formula;
       }
     }
   } while (validacao != 0);
@@ -177,9 +178,13 @@ string insereInfixo(){
   int cont = 0;
 
   while ((formula[cont]) != '\0'){
-    pInfixo.push(formula[cont]);
+    if((formula[cont]) != ' '){
+      pInfixo.push(formula[cont]);
+    }
     cont++;
   }
+  
+  return pInfixo;
 }
 
 // Insere os valores numéricos para cada variável da expressão
@@ -294,15 +299,12 @@ float operacaoAvaliacao(float numero1, float numero2, char operador){
   }
   
   return resposta;
-}
-
-//--------------------------expressoes que não funcionam---------------------------
-// ((a+b)-c)/e   a+b+c+d+e...   
+} 
 
 // Avalia a Expressão
 Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis){
   int count = 0, x;
-  float numero1, numero2, numero3, resposta;
+  float numero1, numero2, resposta;
   Pilha pResposta;
 
   pPosfixo = revertePilha(pPosfixo);
@@ -312,33 +314,11 @@ Pilha avaliarExpressao(Pilha pPosfixo, Pilha pValoresVariaveis){
     if (((int)pPosfixo.topo() >= 97 && (int)pPosfixo.topo() <= 122) || ((int)pPosfixo.topo() >= 65 && (int)pPosfixo.topo() <= 90)){
       
       char aux1 = (int)pPosfixo.pop();
-      char aux2 = (int)pPosfixo.pop();
-      char aux3 = (int)pPosfixo.pop();
+      numero1 = pValoresVariaveis.pop();
 
-      if (aux3 == -1){
-        numero1 = pResposta.pop();
-        numero2 = pValoresVariaveis.pop();
-        
-        resposta = operacaoAvaliacao(numero2, numero1, aux2);
-        pResposta.push(resposta);
-      } else if (ehOperador(aux3)){
-        numero1 = pValoresVariaveis.pop();
-        numero2 = pValoresVariaveis.pop();
-        
-        resposta = operacaoAvaliacao(numero2, numero1, aux3);
-        pResposta.push(resposta);
-      } else{
-        numero1 = pValoresVariaveis.pop();
-        pResposta.push(numero1);
-        
-        char aux4 = (int)pPosfixo.pop();
-        numero2 = pValoresVariaveis.pop();
-        numero3 = pValoresVariaveis.pop();
-        
-        resposta = operacaoAvaliacao(numero3, numero2, aux4);
-        pResposta.push(resposta);
-      }
-    } else{
+      pResposta.push(numero1);
+      
+    } else {
       char aux1 = (int)pPosfixo.pop();
       
       numero1 = pResposta.pop();
@@ -372,13 +352,9 @@ int main() {
     switch (opcao){
       
       case 1:{
-        infixo = insereInfixo();
+        pInfixo = insereInfixo();
         cout << "\n\t-- Expressão Infixa --\n";
         cout << "\n- Fórmula: ";
-        
-        for (int i = 0; infixo[i] != '\0'; i++) {
-          pInfixo.push(infixo[i]);
-        }
         
         imprimePilha(pInfixo);
         pInfixo = revertePilha(pInfixo);
@@ -398,9 +374,7 @@ int main() {
       }
       
       case 3:{
-        if (!infixoNovo[0] == '\0'){
-          cout << posfixo;
-        } else if (infixoNovo[0] == '\0' && !infixo[0] == '\0'){
+        if (!pInfixo.isEmpty()){
           pPosfixo = convertePosfixa(pTemporaria, pInfixo);
           cout << "\n\t-- Expressão Posfixa --\n";
           cout << "\n- Fórmula: ";
@@ -412,20 +386,24 @@ int main() {
       }
       
       case 4: {
-        cout << "\n\t-- Avaliando a Expressão --\n";
-      	cout << "\n- Expressão Original (infixo): ";
-      	imprimePilha(pInfixo);
-      	cout << "\n- Expressão posfixa: ";
-      	imprimePilha(pPosfixo);
-      	cout << "\n- Valores das variáveis: ";
-        imprimeValoresVariaveis(pPosfixo, pValoresVariaveis);
-        cout << "\n- O Resultado do calculo é: ";
-        pAvaliacao = avaliarExpressao(pPosfixo, pValoresVariaveis);
-        imprimePilhaInteirosExclusivos(pAvaliacao);
+        if (!pPosfixo.isEmpty()){
+          cout << "\n\t-- Avaliando a Expressão --\n";
+          cout << "\n- Expressão Original (infixo): ";
+          imprimePilha(pInfixo);
+          cout << "\n- Expressão posfixa: ";
+          imprimePilha(pPosfixo);
+          cout << "\n- Valores das variáveis: ";
+          imprimeValoresVariaveis(pPosfixo, pValoresVariaveis);
+          cout << "\n- O Resultado do calculo é: ";
+          pAvaliacao = avaliarExpressao(pPosfixo, pValoresVariaveis);
+          imprimePilhaInteirosExclusivos(pAvaliacao);
+        } else {
+          cout << "\nCertifique-se de primeiro adicionar uma expressão infixa (Opção 1).\n";
+        }
         break;
       }
       
-      default:{
+      default: {
         cout << "\nFinalizando...";
         sair = true;
         break;
